@@ -25,6 +25,7 @@
     "@grammyjs/storage-file": "^2.0.2",
     "dotenv": "^16.0.3",
     "google-spreadsheet": "^3.3.0",
-    "grammy": "^1.13.0"
+    "grammy": "^1.13.0",
+    "moment": "^2.29.4"
   }
 }

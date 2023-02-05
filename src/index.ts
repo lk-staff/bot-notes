@@ -10,7 +10,7 @@ const bot = new Bot<BotContext>(config.BOT_TOKEN);
 
 bot.api.setMyCommands([
   { command: "start", description: "Начать работу с ботом" },
-  { command: "settings", description: "Изменить настройки" },
+  { command: "updated", description: "Изменить id таблицы" },
 ]);
 
 bot.use(authGuard);
@@ -23,9 +23,7 @@ bot.use(
   session({
     initial: () => ({
       counter: 0,
-      timeZone: "",
       googleSheetsId: "",
-      reminders: [],
       ...getSessionKey,
     }),
     storage: new FileAdapter({
@@ -36,8 +34,6 @@ bot.use(
 
 bot.hears(/wtf/, async (ctx: BotContext) => {
   await ctx.reply(`googleSheetsId: ${ctx.session.googleSheetsId}`);
-  await ctx.reply(`timeZone: ${ctx.session.timeZone}`);
-  await ctx.reply(`reminders: ${ctx.session.reminders}`);
   await ctx.reply(`counter: ${ctx.session.counter}`);
 });
 

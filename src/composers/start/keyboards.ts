@@ -3,8 +3,10 @@ import { Keyboard } from "grammy";
 export const mainKeyboard = new Keyboard()
   .text("Добавить напоминание")
   .row()
-  .text("Посмотреть напоминания")
+  .text("Ввести доход в таблицу")
   .row()
-  .text("Ввести доходы-расходы")
+  .text("Ввести расход в таблицу")
+  .row()
+  .text("Ввести прочее в таблицу")
   .resized()
   .oneTime(false);

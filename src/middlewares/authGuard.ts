@@ -1,5 +1,5 @@
 import { NextFunction } from "grammy";
-import { BotContext } from "src/types/BotContext";
+import { BotContext } from "../types/BotContext";
 
 const users: number[] = [792482249, 5251552822, 821100660];
 

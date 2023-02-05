@@ -1,6 +1,6 @@
 import { Composer } from "grammy";
 import { conversations, createConversation } from "@grammyjs/conversations";
-import { BotContext } from "src/types/BotContext";
+import { BotContext } from "../../types/BotContext";
 import { saveSettingsUser } from "./conversations";
 import { mainKeyboard } from "./keyboards";
 
@@ -10,7 +10,7 @@ startComposer.use(conversations());
 startComposer.use(createConversation(saveSettingsUser));
 
 startComposer.command("start", async (ctx) => {
-  if (ctx.session.timeZone === "" && ctx.session.googleSheetsId === "") {
+  if (ctx.session.googleSheetsId === "") {
     await ctx.reply(
       `Привет, ${ctx.from?.username}, вижу ты у нас впервые,  нужно заполнить некотрые данные!`
     );
@@ -21,4 +21,8 @@ startComposer.command("start", async (ctx) => {
       { reply_markup: mainKeyboard }
     );
   }
+});
+
+startComposer.command("updated", async (ctx) => {
+  await ctx.conversation.enter("saveSettingsUser");
 });

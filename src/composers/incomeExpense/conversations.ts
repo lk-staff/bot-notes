@@ -1,60 +1,42 @@
-import { BotContext } from "src/types/BotContext";
-import { BotConversation } from "src/types/BotConversation";
-import {
-  GoogleSpreadsheet,
-  GoogleSpreadsheetWorksheet,
-} from "google-spreadsheet";
-import { config } from "../../config";
+import { BotContext } from "../../types/BotContext";
+import { BotConversation } from "../../types/BotConversation";
+import { saveData } from "../../utils/saveData";
 
-export const saveIncomeExpense = async (
+export const saveIncome = async (
   conversation: BotConversation,
   ctx: BotContext
 ) => {
-  await ctx.reply("Введи описание прихода");
-  const describeIncome = await conversation.form.text();
-  await ctx.reply("Введи сумму прихода (Только число)");
-  const amountIncome = await conversation.form.number();
-  await ctx.reply("Введи описание расхода");
-  const describeExpense = await conversation.form.text();
-  await ctx.reply("Введи сумму расхода (Только число)");
-  const amountExpense = await conversation.form.number();
-
-  const balanceRub = amountIncome - amountExpense;
-  const percentageMargin = Math.round(amountIncome / (balanceRub / 100));
+  await ctx.reply("Введи доход: ");
+  const income = await conversation.form.text();
 
   if (conversation.session.googleSheetsId !== "") {
     try {
-      const doc: GoogleSpreadsheet = new GoogleSpreadsheet(
-        conversation.session.googleSheetsId
-      );
+      await saveData(conversation.session.googleSheetsId, {
+        type: "Доход",
+        msg: income,
+      });
+      await ctx.reply("Сохранил, что дальше?");
+    } catch (error) {
+      await ctx.reply("Что то пошло не так, проверьте id таблицы.");
+    }
+  } else {
+    await ctx.reply("Нужно заполнить id таблицы!");
+  }
+};
 
-      await doc.useServiceAccountAuth(config.spreadsheet);
+export const saveExpense = async (
+  conversation: BotConversation,
+  ctx: BotContext
+) => {
+  await ctx.reply("Введи расход: ");
+  const expense = await conversation.form.text();
 
-      await doc.loadInfo();
-
-      const sheet: GoogleSpreadsheetWorksheet = doc.sheetsByIndex[0];
-      await sheet.setHeaderRow([
-        "Дата события",
-        "Описание прихода",
-        "Сумма прихода",
-        "Описания расхода",
-        "Сумма расхода",
-        "Остаток в руб",
-        "Маржа в %",
-      ]);
-
-      const date = new Date().toLocaleString();
-
-      await sheet.addRow([
-        date,
-        describeIncome,
-        amountIncome,
-        describeExpense,
-        amountExpense,
-        balanceRub,
-        percentageMargin,
-      ]);
-
+  if (conversation.session.googleSheetsId !== "") {
+    try {
+      await saveData(conversation.session.googleSheetsId, {
+        type: "Расход",
+        msg: expense,
+      });
       await ctx.reply("Сохранил, что дальше?");
     } catch (error) {
       await ctx.reply("Что то пошло не так, проверьте id таблицы.");

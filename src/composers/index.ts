@@ -1,11 +1,13 @@
 import { Composer } from "grammy";
-import { BotContext } from "src/types/BotContext";
+import { BotContext } from "../types/BotContext";
 import { startComposer } from "./start";
-import { remindersComposer } from "./reminders";
 import { incomeExpenseComposer } from "./incomeExpense";
+import { reminderComposer } from "./reminder";
+import { otherComposer } from "./other";
 
 export const mainComposer = new Composer<BotContext>();
 
 mainComposer.use(startComposer);
-mainComposer.use(remindersComposer);
 mainComposer.use(incomeExpenseComposer);
+mainComposer.use(reminderComposer);
+mainComposer.use(otherComposer);
